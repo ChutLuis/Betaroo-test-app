@@ -1,27 +1,22 @@
 import { Image, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { ELITE_BG } from './confidence';
 
-/**
- * Exact-replica background for the ELITE chance badge in Figma (node I1:2458;146:1726;163:24984).
- *
- * 5 layers, bottom → top:
- *   1. Base fill `ELITE_BG`
- *   2. Radial pink highlight from top-center (SVG)
- *   3. White radial highlight from bottom-center (SVG, approximating mix-blend-overlay via alpha)
- *   4. ~155° linear dark overlay (shadow bands at edges)
- *   5. Noise texture, two passes (0.25 + 0.125 opacity) approximating Figma's mix-blend-overlay stack
- *
- * Designed to be dropped into any parent with a clipped border-radius; this component fills
- * its parent via `StyleSheet.absoluteFillObject`.
- */
+// Base fill for the ELITE tier surface (Figma node I1:2458;146:1726;163:24984).
+// Kept here, next to the only component that layers on top of it.
+export const ELITE_BASE = 'rgb(205, 49, 88)';
+
 const noise = require('../../assets/textures/noise.png');
 
+/**
+ * 5 stacked layers reproducing Figma's ELITE-tier surface: base fill,
+ * pink radial, white radial, dark linear edge-bands, and two noise passes.
+ * Drops into any parent with `overflow: 'hidden'` via absoluteFillObject.
+ */
 export function EliteBackground() {
   return (
     <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: ELITE_BG }]} />
+      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: ELITE_BASE }]} />
 
       <Svg style={StyleSheet.absoluteFillObject} preserveAspectRatio="none">
         <Defs>

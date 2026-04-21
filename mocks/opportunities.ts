@@ -1,143 +1,153 @@
-import type { PlayerCardProps } from '@/cards/PlayerCard';
-import type { TeamCardProps } from '@/cards/TeamCard';
+import type { PlayerCardProps, TeamCardProps } from '@/components/opportunity';
+import { playerAvatars, teamLogos } from './assets';
 
 export type Opportunity =
   | ({ kind: 'player'; id: string } & PlayerCardProps)
   | ({ kind: 'team'; id: string } & TeamCardProps);
 
-const playerWhite = require('../assets/figma-icons/image.png');
-const logoCeltics = require('../assets/figma-icons/team-logo.png');
-const logoThunder = require('../assets/figma-icons/team-logo-state.png');
-const logoBulls = require('../assets/figma-icons/team-logo-bulls.png');
-const logoNuggets = require('../assets/figma-icons/team-logo-state-1.png');
-const logoLakers = require('../assets/figma-icons/team-logo-lakers.png');
-const logoSuns = require('../assets/figma-icons/team-logo-suns.png');
-const logoSixers = require('../assets/figma-icons/team-logo-sixers.png');
-const playerJaylen = require('../assets/figma-icons/player-jaylen-brown.png');
-const playerEmbiid = require('../assets/figma-icons/player-joel-embiid.png');
+const matchups = {
+  okcChi: {
+    home: { label: 'OKC', color: '#ef5133', image: teamLogos.thunder },
+    away: { label: 'CHI', color: '#ce1141', image: teamLogos.bulls },
+    time: 'FRI 10AM',
+  },
+  celGsw: {
+    home: { label: 'CEL', color: '#008348', image: teamLogos.celtics },
+    away: { label: 'GSW', color: '#1D428A', image: teamLogos.celtics },
+    time: 'FRI 10AM',
+  },
+  lalBos: {
+    home: { label: 'LAL', color: '#552583', image: teamLogos.lakers },
+    away: { label: 'BOS', color: '#007A33', image: teamLogos.celtics },
+    time: 'SAT 7PM',
+  },
+  miaNyk: {
+    home: { label: 'MIA', color: '#98002E', image: teamLogos.celtics },
+    away: { label: 'NYK', color: '#006BB6', image: teamLogos.celtics },
+    time: 'SUN 6PM',
+  },
+  denPho: {
+    home: { label: 'DEN', color: '#0d2240', image: teamLogos.nuggets },
+    away: { label: 'PHO', color: '#E56020', image: teamLogos.suns },
+    time: 'MON 9PM',
+  },
+  phiTor: {
+    home: { label: 'PHI', color: '#006BB6', image: teamLogos.sixers },
+    away: { label: 'TOR', color: '#CE1141', image: teamLogos.sixers },
+    time: 'TUE 7PM',
+  },
+};
 
 export const opportunities: Opportunity[] = [
   {
     kind: 'team',
     id: 'okc-chi-ml',
-    team1: 'OKC',
-    team2: 'CHI',
-    time: 'FRI 10AM',
+    matchup: matchups.okcChi,
     teamName: 'Oklahoma City Thunder',
-    market: 'Moneyline',
-    confidence: 95,
-    stats: [
-      { label: 'L5', value: 80 },
-      { label: 'L10', value: 80 },
-      { label: 'L20', value: 80 },
-    ],
-    odds: '+172',
-    home: { label: 'OKC', color: '#ef5133', image: logoThunder },
-    away: { label: 'CHI', color: '#ce1141', image: logoBulls },
+    pick: {
+      market: 'Moneyline',
+      confidence: 95,
+      stats: [
+        { label: 'L5', value: 80 },
+        { label: 'L10', value: 80 },
+        { label: 'L20', value: 80 },
+      ],
+      odds: '+172',
+    },
   },
   {
     kind: 'player',
     id: 'cel-gsw-dw',
-    team1: 'CEL',
-    team2: 'GSW',
-    time: 'FRI 10AM',
-    playerName: 'Derrick White',
-    position: 'SG',
-    statLine: '+6 Assists',
-    confidence: 75,
-    stats: [
-      { label: 'L5', value: 75 },
-      { label: 'L10', value: 72 },
-      { label: 'L20', value: 71 },
-    ],
-    odds: '+172',
-    avatarLabel: 'DW',
-    avatarColor: '#bb9753',
-    avatarImage: playerWhite,
-    teamBadgeLabel: 'C',
-    teamBadgeColor: '#008348',
-    teamBadgeImage: logoCeltics,
+    matchup: matchups.celGsw,
+    player: {
+      name: 'Derrick White',
+      position: 'SG',
+      avatar: { label: 'DW', color: '#bb9753', image: playerAvatars.white },
+      teamBadge: { label: 'C', color: '#008348', image: teamLogos.celtics },
+    },
+    pick: {
+      market: '+6 Assists',
+      confidence: 75,
+      stats: [
+        { label: 'L5', value: 75 },
+        { label: 'L10', value: 72 },
+        { label: 'L20', value: 71 },
+      ],
+      odds: '+172',
+    },
   },
   {
     kind: 'team',
     id: 'lal-bos-sprd',
-    team1: 'LAL',
-    team2: 'BOS',
-    time: 'SAT 7PM',
+    matchup: matchups.lalBos,
     teamName: 'Los Angeles Lakers',
-    market: 'Spread -3.5',
-    confidence: 55,
-    stats: [
-      { label: 'L5', value: 55 },
-      { label: 'L10', value: 58 },
-      { label: 'L20', value: 52 },
-    ],
-    odds: '-110',
-    home: { label: 'LAL', color: '#552583', image: logoLakers },
-    away: { label: 'BOS', color: '#007A33', image: logoCeltics },
+    pick: {
+      market: 'Spread -3.5',
+      confidence: 55,
+      stats: [
+        { label: 'L5', value: 55 },
+        { label: 'L10', value: 58 },
+        { label: 'L20', value: 52 },
+      ],
+      odds: '-110',
+    },
   },
   {
     kind: 'player',
     id: 'mia-nyk-jb',
-    team1: 'MIA',
-    team2: 'NYK',
-    time: 'SUN 6PM',
-    playerName: 'Jaylen Brown',
-    position: 'SF',
-    statLine: '+24.5 Points',
-    confidence: 95,
-    stats: [
-      { label: 'L5', value: 92 },
-      { label: 'L10', value: 88 },
-      { label: 'L20', value: 84 },
-    ],
-    odds: '-135',
-    avatarLabel: 'JB',
-    avatarColor: '#007A33',
-    avatarImage: playerJaylen,
-    teamBadgeLabel: 'B',
-    teamBadgeColor: '#008348',
-    teamBadgeImage: logoCeltics,
+    matchup: matchups.miaNyk,
+    player: {
+      name: 'Jaylen Brown',
+      position: 'SF',
+      avatar: { label: 'JB', color: '#007A33', image: playerAvatars.jaylenBrown },
+      teamBadge: { label: 'B', color: '#008348', image: teamLogos.celtics },
+    },
+    pick: {
+      market: '+24.5 Points',
+      confidence: 95,
+      stats: [
+        { label: 'L5', value: 92 },
+        { label: 'L10', value: 88 },
+        { label: 'L20', value: 84 },
+      ],
+      odds: '-135',
+    },
   },
   {
     kind: 'team',
     id: 'den-pho-total',
-    team1: 'DEN',
-    team2: 'PHO',
-    time: 'MON 9PM',
+    matchup: matchups.denPho,
     teamName: 'Denver Nuggets',
-    market: 'Total Over 221.5',
-    confidence: 75,
-    stats: [
-      { label: 'L5', value: 78 },
-      { label: 'L10', value: 73 },
-      { label: 'L20', value: 70 },
-    ],
-    odds: '+108',
-    home: { label: 'DEN', color: '#0d2240', image: logoNuggets },
-    away: { label: 'PHO', color: '#E56020', image: logoSuns },
+    pick: {
+      market: 'Total Over 221.5',
+      confidence: 75,
+      stats: [
+        { label: 'L5', value: 78 },
+        { label: 'L10', value: 73 },
+        { label: 'L20', value: 70 },
+      ],
+      odds: '+108',
+    },
   },
   {
     kind: 'player',
     id: 'phi-tor-je',
-    team1: 'PHI',
-    team2: 'TOR',
-    time: 'TUE 7PM',
-    playerName: 'Joel Embiid',
-    position: 'C',
-    statLine: '+10.5 Rebounds',
-    confidence: 25,
-    stats: [
-      { label: 'L5', value: 32 },
-      { label: 'L10', value: 38 },
-      { label: 'L20', value: 42 },
-    ],
-    odds: '+240',
-    avatarLabel: 'JE',
-    avatarColor: '#ED174C',
-    avatarImage: playerEmbiid,
-    teamBadgeLabel: 'P',
-    teamBadgeColor: '#006BB6',
-    teamBadgeImage: logoSixers,
+    matchup: matchups.phiTor,
+    player: {
+      name: 'Joel Embiid',
+      position: 'C',
+      avatar: { label: 'JE', color: '#ED174C', image: playerAvatars.joelEmbiid },
+      teamBadge: { label: 'P', color: '#006BB6', image: teamLogos.sixers },
+    },
+    pick: {
+      market: '+10.5 Rebounds',
+      confidence: 25,
+      stats: [
+        { label: 'L5', value: 32 },
+        { label: 'L10', value: 38 },
+        { label: 'L20', value: 42 },
+      ],
+      odds: '+240',
+    },
   },
 ];

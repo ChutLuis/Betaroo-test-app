@@ -1,11 +1,10 @@
 import { Fragment } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { theme } from '@/tokens';
-import { Icon } from '../../atoms/Icon';
-import { L5Pill } from '../../atoms/L5Pill';
+import { Icon } from '@/components/primitives';
+import { StatPill } from './StatPill';
 import { OddsBadge } from './OddsBadge';
-
-export type StatLine = { label: string; value: number };
+import type { StatLine } from './types';
 
 type Props = {
   stats: StatLine[];
@@ -13,28 +12,26 @@ type Props = {
   onAddPress?: () => void;
 };
 
-export function CardFooter({ stats, odds, onAddPress }: Props) {
+export function OpportunityFooter({ stats, odds, onAddPress }: Props) {
   return (
     <View style={styles.root}>
-      <View style={styles.inner}>
-        <View style={styles.stats}>
-          {stats.map((s, idx) => (
-            <Fragment key={s.label}>
-              {idx > 0 ? <View style={styles.divider} /> : null}
-              <L5Pill label={s.label} value={s.value} />
-            </Fragment>
-          ))}
-        </View>
-        <View style={styles.right}>
-          <OddsBadge odds={odds} />
-          <Pressable
-            hitSlop={8}
-            onPress={onAddPress}
-            style={({ pressed }) => [styles.addBtn, pressed && styles.addBtnPressed]}
-          >
-            <Icon name="addCircle" size={14} color={theme.color.icon.primary} />
-          </Pressable>
-        </View>
+      <View style={styles.stats}>
+        {stats.map((stat, idx) => (
+          <Fragment key={stat.label}>
+            {idx > 0 ? <View style={styles.divider} /> : null}
+            <StatPill label={stat.label} value={stat.value} />
+          </Fragment>
+        ))}
+      </View>
+      <View style={styles.right}>
+        <OddsBadge odds={odds} />
+        <Pressable
+          hitSlop={8}
+          onPress={onAddPress}
+          style={({ pressed }) => [styles.addBtn, pressed && styles.addBtnPressed]}
+        >
+          <Icon name="addCircle" size={14} color={theme.color.icon.primary} />
+        </Pressable>
       </View>
     </View>
   );
@@ -42,16 +39,14 @@ export function CardFooter({ stats, odds, onAddPress }: Props) {
 
 const styles = StyleSheet.create({
   root: {
-    paddingHorizontal: theme.space[12],
-    paddingVertical: theme.space[8],
-    borderTopWidth: 1,
-    borderTopColor: theme.color.border.dark,
-  },
-  inner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: theme.space[8],
+    paddingHorizontal: theme.space[12],
+    paddingVertical: theme.space[8],
+    borderTopWidth: 1,
+    borderTopColor: theme.color.border.dark,
   },
   stats: {
     flexDirection: 'row',

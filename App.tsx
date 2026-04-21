@@ -1,53 +1,34 @@
-import { useCallback, useEffect, useState } from 'react';
-import {
-  DMMono_500Medium,
-  useFonts as useDmMono,
-} from '@expo-google-fonts/dm-mono';
-import {
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  useFonts as useInter,
-} from '@expo-google-fonts/inter';
-import {
-  Manrope_500Medium,
-  Manrope_600SemiBold,
-  useFonts as useManrope,
-} from '@expo-google-fonts/manrope';
+import { useCallback, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, type ListRenderItem } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native';
-import { PlayerCard } from '@/cards/PlayerCard';
-import { TeamCard } from '@/cards/TeamCard';
-import { LeagueSelect } from '@/select/LeagueSelect';
-import { leagues } from '@/mocks/leagues';
-import { opportunities, type Opportunity } from '@/mocks/opportunities';
+import { PlayerCard, TeamCard } from '@/components/opportunity';
+import { LeagueSelect } from '@/components/select';
+import { useAppFonts, useLeagues, useOpportunities } from '@/hooks';
+import type { Opportunity } from '@/mocks';
 import { theme } from '@/tokens';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
-function renderOpportunity({ item }: { item: Opportunity }) {
-  if (item.kind === 'player') {
-    const { kind, id, ...props } = item;
-    return <PlayerCard {...props} />;
+const renderOpportunity: ListRenderItem<Opportunity> = ({ item }) => {
+  switch (item.kind) {
+    case 'player':
+      return <PlayerCard matchup={item.matchup} player={item.player} pick={item.pick} />;
+    case 'team':
+      return <TeamCard matchup={item.matchup} teamName={item.teamName} pick={item.pick} />;
   }
-  const { kind, id, ...props } = item;
-  return <TeamCard {...props} />;
-}
+};
+
+const keyExtractor = (item: Opportunity) => item.id;
+const ItemSeparator = () => <View style={styles.sep} />;
 
 export default function App() {
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
-  const [manropeLoaded] = useManrope({ Manrope_500Medium, Manrope_600SemiBold });
-  const [interLoaded] = useInter({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold });
-  const [dmMonoLoaded] = useDmMono({ DMMono_500Medium });
-  const fontsLoaded = manropeLoaded && interLoaded && dmMonoLoaded;
+  const fontsLoaded = useAppFonts();
+  const opportunities = useOpportunities();
+  const leagues = useLeagues();
 
   const onLayoutRoot = useCallback(() => {
-    if (fontsLoaded) SplashScreen.hideAsync().catch(() => {});
-  }, [fontsLoaded]);
-
-  useEffect(() => {
     if (fontsLoaded) SplashScreen.hideAsync().catch(() => {});
   }, [fontsLoaded]);
 
@@ -58,9 +39,9 @@ export default function App() {
       <StatusBar style="light" />
       <FlatList
         data={opportunities}
-        keyExtractor={(it) => it.id}
+        keyExtractor={keyExtractor}
         renderItem={renderOpportunity}
-        ItemSeparatorComponent={() => <View style={styles.sep} />}
+        ItemSeparatorComponent={ItemSeparator}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>Today's Opportunities</Text>

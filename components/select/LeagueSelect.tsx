@@ -1,14 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Animated,
-  Easing,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { useMemo, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { theme } from '@/tokens';
-import { Icon } from '../atoms/Icon';
+import { Icon } from '@/components/primitives';
+import { useSelectAnimation } from './useSelectAnimation';
 
 export type LeagueOption = {
   id: string;
@@ -21,10 +15,15 @@ type Props = {
   options: LeagueOption[];
   value: string[];
   onChange: (next: string[]) => void;
+  /** Override the placeholder template. Receives the current count. */
+  renderSummary?: (count: number) => string;
 };
 
 const ROW_HEIGHT = 36;
 const PANEL_PAD = 4;
+const PANEL_OFFSET = 8;
+
+const defaultSummary = (count: number) => `${count} Leagues Selected`;
 
 export function LeagueSelect({
   label = 'Preferred Leagues',
@@ -32,83 +31,33 @@ export function LeagueSelect({
   options,
   value,
   onChange,
+  renderSummary = defaultSummary,
 }: Props) {
   const [open, setOpen] = useState(false);
-  const progress = useRef(new Animated.Value(0)).current;
-  const countProgress = useRef(new Animated.Value(value.length === 0 ? 0 : 1)).current;
-
-  useEffect(() => {
-    Animated.timing(progress, {
-      toValue: open ? 1 : 0,
-      duration: 220,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: false,
-    }).start();
-  }, [open, progress]);
-
-  useEffect(() => {
-    Animated.spring(countProgress, {
-      toValue: value.length === 0 ? 0 : 1,
-      damping: 18,
-      stiffness: 180,
-      useNativeDriver: true,
-    }).start();
-  }, [value.length, countProgress]);
 
   const panelHeight = useMemo(
     () => options.length * ROW_HEIGHT + PANEL_PAD * 2,
     [options.length],
   );
 
-  const animatedHeight = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, panelHeight],
-  });
-  const panelMarginTop = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 8],
-  });
-  const panelOpacity = progress.interpolate({
-    inputRange: [0, 0.4, 1],
-    outputRange: [0, 0, 1],
-  });
-  const chevronRotate = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
-  });
-  const ringOpacity = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-  const borderWhiteOpacity = progress;
-
-  const filledOpacity = countProgress;
-  const emptyOpacity = countProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0],
-  });
-  const emptyTranslate = countProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -6],
-  });
-  const filledTranslate = countProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [6, 0],
+  const anim = useSelectAnimation({
+    open,
+    hasValue: value.length > 0,
+    panelHeight,
+    panelOffset: PANEL_OFFSET,
   });
 
-  const toggle = () => setOpen((o) => !o);
+  const toggle = () => setOpen((prev) => !prev);
   const toggleItem = (id: string) => {
-    const next = value.includes(id) ? value.filter((v) => v !== id) : [...value, id];
-    onChange(next);
+    onChange(value.includes(id) ? value.filter((v) => v !== id) : [...value, id]);
   };
 
-  const summaryText = `${value.length} Leagues Selected`;
   const isDefaultState = !open && value.length === 0;
   const iconColor = isDefaultState ? theme.color.icon.tertiary : theme.color.icon.secondary;
   const emptyTextColor = open ? theme.color.text.primary : theme.color.text.tertiary;
 
   return (
-    <View style={styles.root}>
+    <View>
       <View style={styles.fieldGroup}>
         <View style={styles.labelRow}>
           <Text style={styles.label}>{label}</Text>
@@ -116,69 +65,57 @@ export function LeagueSelect({
         </View>
 
         <View style={styles.fieldWrap}>
-        <Animated.View
-          pointerEvents="none"
-          style={[styles.focusRingOuter, { opacity: ringOpacity }]}
-        />
-        <Animated.View
-          pointerEvents="none"
-          style={[styles.focusRingInner, { opacity: ringOpacity }]}
-        />
-        <Pressable onPress={toggle} style={styles.field}>
-          <Animated.View
-            pointerEvents="none"
-            style={[
-              StyleSheet.absoluteFillObject,
-              styles.fieldBorderWhite,
-              { opacity: borderWhiteOpacity },
-            ]}
-          />
-          <View style={styles.fieldLeft}>
-            <Icon name="basketball" size={20} color={iconColor} />
-            <View style={styles.placeholderWrap}>
-              <Animated.Text
-                style={[
-                  styles.placeholder,
-                  styles.placeholderStacked,
-                  {
-                    color: emptyTextColor,
-                    opacity: emptyOpacity,
-                    transform: [{ translateY: emptyTranslate }],
-                  },
-                ]}
-                numberOfLines={1}
-              >
-                0 Leagues Selected
-              </Animated.Text>
-              <Animated.Text
-                style={[
-                  styles.placeholder,
-                  styles.placeholderStacked,
-                  {
-                    opacity: filledOpacity,
-                    transform: [{ translateY: filledTranslate }],
-                  },
-                ]}
-                numberOfLines={1}
-              >
-                {summaryText}
-              </Animated.Text>
+          <Animated.View pointerEvents="none" style={[styles.focusRingOuter, { opacity: anim.ring }]} />
+          <Animated.View pointerEvents="none" style={[styles.focusRingInner, { opacity: anim.ring }]} />
+          <Pressable onPress={toggle} style={styles.field}>
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                StyleSheet.absoluteFillObject,
+                styles.fieldBorderWhite,
+                { opacity: anim.borderWhite },
+              ]}
+            />
+            <View style={styles.fieldLeft}>
+              <Icon name="basketball" size={20} color={iconColor} />
+              <View style={styles.placeholderWrap}>
+                <Animated.Text
+                  style={[
+                    styles.placeholder,
+                    styles.placeholderStacked,
+                    {
+                      color: emptyTextColor,
+                      opacity: anim.empty.opacity,
+                      transform: [{ translateY: anim.empty.translateY }],
+                    },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {renderSummary(0)}
+                </Animated.Text>
+                <Animated.Text
+                  style={[
+                    styles.placeholder,
+                    styles.placeholderStacked,
+                    {
+                      opacity: anim.filled.opacity,
+                      transform: [{ translateY: anim.filled.translateY }],
+                    },
+                  ]}
+                  numberOfLines={1}
+                >
+                  {renderSummary(value.length)}
+                </Animated.Text>
+              </View>
             </View>
-          </View>
-          <Animated.View style={{ transform: [{ rotate: chevronRotate }] }}>
-            <Icon name="chevronDown" size={20} color={iconColor} />
-          </Animated.View>
-        </Pressable>
+            <Animated.View style={{ transform: [{ rotate: anim.chevronRotate }] }}>
+              <Icon name="chevronDown" size={20} color={iconColor} />
+            </Animated.View>
+          </Pressable>
         </View>
       </View>
 
-      <Animated.View
-        pointerEvents={open ? 'auto' : 'none'}
-        style={[
-          styles.panel,
-          { height: animatedHeight, marginTop: panelMarginTop, opacity: panelOpacity },
-        ]}
-      >
+      <Animated.View pointerEvents={open ? 'auto' : 'none'} style={[styles.panel, anim.panel]}>
         <View style={styles.panelInner}>
           {options.map((opt) => {
             const selected = value.includes(opt.id);
@@ -206,7 +143,6 @@ export function LeagueSelect({
 }
 
 const styles = StyleSheet.create({
-  root: {},
   fieldGroup: {
     gap: theme.space[4],
   },

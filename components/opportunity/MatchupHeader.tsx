@@ -1,38 +1,34 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { theme } from '@/tokens';
-import { Icon } from '../../atoms/Icon';
+import { Icon } from '@/components/primitives';
+import type { Matchup, MatchupActions } from './types';
 
-type Props = {
-  team1: string;
-  team2: string;
-  time: string;
-  onInfoPress?: () => void;
-  onSharePress?: () => void;
-  onOpenPress?: () => void;
-};
+type Props = Pick<Matchup, 'home' | 'away' | 'time'> & MatchupActions;
 
-export function CardHeader({ team1, team2, time, onInfoPress, onSharePress, onOpenPress }: Props) {
+const ACTIONS = [
+  { icon: 'info', handlerKey: 'onInfoPress' },
+  { icon: 'share', handlerKey: 'onSharePress' },
+  { icon: 'chevronRight', handlerKey: 'onOpenPress' },
+] as const;
+
+export function MatchupHeader({ home, away, time, ...actions }: Props) {
   return (
     <View style={styles.root}>
       <View style={styles.left}>
         <View style={styles.vs}>
-          <Text style={[styles.meta, styles.metaActive]}>{team1}</Text>
+          <Text style={[styles.meta, styles.metaActive]}>{home.label}</Text>
           <Text style={[styles.meta, styles.metaDisabled, styles.atSign]}>@</Text>
-          <Text style={[styles.meta, styles.metaDisabled]}>{team2}</Text>
+          <Text style={[styles.meta, styles.metaDisabled]}>{away.label}</Text>
         </View>
         <View style={styles.dot} />
         <Text style={[styles.meta, styles.metaDisabled]}>{time}</Text>
       </View>
       <View style={styles.actions}>
-        <Pressable hitSlop={8} onPress={onInfoPress} style={styles.iconBtn}>
-          <Icon name="info" size={14} color={theme.color.icon.secondary} />
-        </Pressable>
-        <Pressable hitSlop={8} onPress={onSharePress} style={styles.iconBtn}>
-          <Icon name="share" size={14} color={theme.color.icon.secondary} />
-        </Pressable>
-        <Pressable hitSlop={8} onPress={onOpenPress} style={styles.iconBtn}>
-          <Icon name="chevronRight" size={14} color={theme.color.icon.secondary} />
-        </Pressable>
+        {ACTIONS.map(({ icon, handlerKey }) => (
+          <Pressable key={icon} hitSlop={8} onPress={actions[handlerKey]}>
+            <Icon name={icon} size={14} color={theme.color.icon.secondary} />
+          </Pressable>
+        ))}
       </View>
     </View>
   );
@@ -70,7 +66,7 @@ const styles = StyleSheet.create({
     color: theme.color.text.disabled,
   },
   atSign: {
-    // Figma glyph (`data-name="vs"`) is an @ character at ~9px.
+    // Figma glyph (`data-name="vs"`) is an @ character at 9px.
     fontSize: 9,
     letterSpacing: 0,
   },
@@ -84,8 +80,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.space[6],
-  },
-  iconBtn: {
-    padding: 0,
   },
 });

@@ -1,15 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '@/tokens';
-import { Icon } from '../../atoms/Icon';
+import { Icon, type IconName } from '@/components/primitives';
 
 type Props = {
   odds: string;
+  iconName?: IconName;
+  iconColor?: string;
 };
 
-export function OddsBadge({ odds }: Props) {
+export function OddsBadge({
+  odds,
+  iconName = 'sportsbook',
+  iconColor = theme.palette.yellow[500],
+}: Props) {
   return (
     <View style={styles.root}>
-      <Icon name="sportsbook" size={12} color={theme.palette.yellow[500]} />
+      <Icon name={iconName} size={12} color={iconColor} />
       <Text style={styles.value}>{odds}</Text>
     </View>
   );
@@ -23,13 +29,12 @@ const styles = StyleSheet.create({
     height: 20,
     minWidth: 15,
     paddingHorizontal: theme.space[4],
-    paddingVertical: 0,
-    borderRadius: 5,
+    borderRadius: theme.radius.sm + 1,
     backgroundColor: theme.color.bg.secondary,
   },
   value: {
     ...theme.typography.monoXs,
-    // Figma's odds pill uses the wider 16px line-height, not the tight badge 14px.
+    // Figma's odds pill uses the wider 16px line-height, not the tight 14px of monoXs.
     lineHeight: 16,
     color: theme.color.text.primary,
     textTransform: 'uppercase',

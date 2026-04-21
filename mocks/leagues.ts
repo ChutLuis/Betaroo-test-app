@@ -1,4 +1,4 @@
-import type { LeagueOption } from '@/select/LeagueSelect';
+import type { LeagueOption } from '@/components/select';
 
 export const leagues: LeagueOption[] = [
   { id: 'nba', name: 'NBA' },

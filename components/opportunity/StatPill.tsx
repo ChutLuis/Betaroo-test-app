@@ -1,30 +1,25 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '@/tokens';
-import { EliteBackground } from './EliteBackground';
-import {
-  CONFIDENCE_PALETTE,
-  ELITE_BG,
-  tierFromPercentage,
-} from './confidence';
+import { TierSurface } from '@/components/primitives';
+import { TIER_PALETTE, tierFromPercentage } from './tier';
 
 type Props = {
+  /** 0-100. Drives both the display value and the tier colour. */
   value: number;
-  label?: string;
+  /** Short caption shown inside the pill (e.g. "L5" for last-5). */
+  label: string;
 };
 
-export function L5Pill({ value, label = 'L5' }: Props) {
+export function StatPill({ value, label }: Props) {
   const tier = tierFromPercentage(value);
-  const { bg, fg } = CONFIDENCE_PALETTE[tier];
-  const isElite = tier === 'elite';
-  const displayValue = `${Math.round(value)}%`;
+  const { bg, fg } = TIER_PALETTE[tier];
 
   return (
     <View style={styles.root}>
-      <View style={[styles.pill, isElite ? { backgroundColor: ELITE_BG } : { backgroundColor: bg }]}>
-        {isElite ? <EliteBackground /> : null}
+      <TierSurface elite={tier === 'elite'} backgroundColor={bg} style={styles.pill}>
         <Text style={[styles.pillLabel, { color: fg }]}>{label}</Text>
-      </View>
-      <Text style={styles.value}>{displayValue}</Text>
+      </TierSurface>
+      <Text style={styles.value}>{Math.round(value)}%</Text>
     </View>
   );
 }
@@ -42,7 +37,6 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
   },
   pillLabel: {
     ...theme.typography.monoXs,
