@@ -29,6 +29,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ac9d64d6-325f-478d-bfdb-f8404f0127c9"
+      }
+    },
+    "owner": "chutluis"
   }
 }
