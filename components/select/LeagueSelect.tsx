@@ -64,6 +64,10 @@ export function LeagueSelect({
     inputRange: [0, 1],
     outputRange: [0, panelHeight],
   });
+  const panelMarginTop = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 8],
+  });
   const panelOpacity = progress.interpolate({
     inputRange: [0, 0.4, 1],
     outputRange: [0, 0, 1],
@@ -99,18 +103,26 @@ export function LeagueSelect({
   };
 
   const summaryText = `${value.length} Leagues Selected`;
+  const isDefaultState = !open && value.length === 0;
+  const iconColor = isDefaultState ? theme.color.icon.tertiary : theme.color.icon.secondary;
+  const emptyTextColor = open ? theme.color.text.primary : theme.color.text.tertiary;
 
   return (
     <View style={styles.root}>
-      <View style={styles.labelRow}>
-        <Text style={styles.label}>{label}</Text>
-        {required ? <Text style={styles.required}>*</Text> : null}
-      </View>
+      <View style={styles.fieldGroup}>
+        <View style={styles.labelRow}>
+          <Text style={styles.label}>{label}</Text>
+          {required ? <Text style={styles.required}>*</Text> : null}
+        </View>
 
-      <View style={styles.fieldWrap}>
+        <View style={styles.fieldWrap}>
         <Animated.View
           pointerEvents="none"
-          style={[styles.focusRing, { opacity: ringOpacity }]}
+          style={[styles.focusRingOuter, { opacity: ringOpacity }]}
+        />
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.focusRingInner, { opacity: ringOpacity }]}
         />
         <Pressable onPress={toggle} style={styles.field}>
           <Animated.View
@@ -122,13 +134,14 @@ export function LeagueSelect({
             ]}
           />
           <View style={styles.fieldLeft}>
-            <Icon name="basketball" size={20} color={theme.color.icon.secondary} />
+            <Icon name="basketball" size={20} color={iconColor} />
             <View style={styles.placeholderWrap}>
               <Animated.Text
                 style={[
                   styles.placeholder,
                   styles.placeholderStacked,
                   {
+                    color: emptyTextColor,
                     opacity: emptyOpacity,
                     transform: [{ translateY: emptyTranslate }],
                   },
@@ -153,16 +166,17 @@ export function LeagueSelect({
             </View>
           </View>
           <Animated.View style={{ transform: [{ rotate: chevronRotate }] }}>
-            <Icon name="chevronDown" size={20} color={theme.color.icon.secondary} />
+            <Icon name="chevronDown" size={20} color={iconColor} />
           </Animated.View>
         </Pressable>
+        </View>
       </View>
 
       <Animated.View
         pointerEvents={open ? 'auto' : 'none'}
         style={[
           styles.panel,
-          { height: animatedHeight, opacity: panelOpacity },
+          { height: animatedHeight, marginTop: panelMarginTop, opacity: panelOpacity },
         ]}
       >
         <View style={styles.panelInner}>
@@ -182,9 +196,6 @@ export function LeagueSelect({
                   <Icon name="globe" size={20} color={theme.color.icon.secondary} />
                   <Text style={styles.rowText}>{opt.name}</Text>
                 </View>
-                {selected ? (
-                  <Icon name="check" size={16} color={theme.color.brand.base} />
-                ) : null}
               </Pressable>
             );
           })}
@@ -195,7 +206,8 @@ export function LeagueSelect({
 }
 
 const styles = StyleSheet.create({
-  root: {
+  root: {},
+  fieldGroup: {
     gap: theme.space[4],
   },
   labelRow: {
@@ -214,7 +226,7 @@ const styles = StyleSheet.create({
   fieldWrap: {
     position: 'relative',
   },
-  focusRing: {
+  focusRingOuter: {
     position: 'absolute',
     top: -4,
     left: -4,
@@ -224,8 +236,17 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.color.border.focus,
   },
+  focusRingInner: {
+    position: 'absolute',
+    top: -2,
+    left: -2,
+    right: -2,
+    bottom: -2,
+    borderRadius: theme.radius.lg + 2,
+    borderWidth: 2,
+    borderColor: theme.color.bg.base,
+  },
   field: {
-    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -237,6 +258,7 @@ const styles = StyleSheet.create({
     borderColor: theme.color.border.primary,
     backgroundColor: theme.color.bg.base,
     gap: theme.space[8],
+    ...theme.shadow.compact,
   },
   fieldBorderWhite: {
     borderRadius: theme.radius.lg,
@@ -266,7 +288,6 @@ const styles = StyleSheet.create({
   },
   panel: {
     overflow: 'hidden',
-    marginTop: theme.space[6],
     borderRadius: theme.radius.lg,
     borderWidth: 1,
     borderColor: theme.color.border.primary,
@@ -285,7 +306,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.color.bg.base,
   },
   rowSelected: {
-    backgroundColor: theme.color.bg.secondary,
+    backgroundColor: theme.color.bg.primary,
+    borderRadius: theme.radius.md,
   },
   rowPressed: {
     opacity: 0.8,

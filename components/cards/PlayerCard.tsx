@@ -1,7 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
 import { theme } from '@/tokens';
 import { ConfidenceBadge } from '../atoms/ConfidenceBadge';
-import type { ConfidenceTier } from '../atoms/confidence';
 import { Avatar } from './parts/Avatar';
 import { CardFooter, type StatLine } from './parts/CardFooter';
 import { CardHeader } from './parts/CardHeader';
@@ -13,13 +12,15 @@ export type PlayerCardProps = {
   playerName: string;
   position: string;
   statLine: string;
-  confidence: ConfidenceTier;
+  confidence: number;
   stats: StatLine[];
   odds: string;
   avatarLabel: string;
   avatarColor: string;
+  avatarImage?: ImageSourcePropType;
   teamBadgeLabel?: string;
   teamBadgeColor?: string;
+  teamBadgeImage?: ImageSourcePropType;
   onPress?: () => void;
 };
 
@@ -35,8 +36,10 @@ export function PlayerCard({
   odds,
   avatarLabel,
   avatarColor,
+  avatarImage,
   teamBadgeLabel,
   teamBadgeColor,
+  teamBadgeImage,
   onPress,
 }: PlayerCardProps) {
   return (
@@ -47,10 +50,11 @@ export function PlayerCard({
           <Avatar
             label={avatarLabel}
             color={avatarColor}
+            image={avatarImage}
             size={34}
             badge={
               teamBadgeLabel && teamBadgeColor
-                ? { label: teamBadgeLabel, color: teamBadgeColor }
+                ? { label: teamBadgeLabel, color: teamBadgeColor, image: teamBadgeImage }
                 : undefined
             }
           />
@@ -64,7 +68,7 @@ export function PlayerCard({
                   <Text style={styles.positionText}>{position}</Text>
                 </View>
               </View>
-              <ConfidenceBadge tier={confidence} />
+              <ConfidenceBadge value={confidence} />
             </View>
             <Text style={styles.statLine} numberOfLines={1}>
               {statLine}
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
   positionChip: {
     height: 12,
     minWidth: 12,
-    paddingHorizontal: theme.space[2],
+    padding: theme.space[2],
     borderRadius: theme.radius.sm,
     backgroundColor: theme.color.state.faded.lighter,
     alignItems: 'center',

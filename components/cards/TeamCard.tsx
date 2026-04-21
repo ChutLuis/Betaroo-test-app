@@ -1,10 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
 import { theme } from '@/tokens';
 import { ConfidenceBadge } from '../atoms/ConfidenceBadge';
-import type { ConfidenceTier } from '../atoms/confidence';
 import { CardFooter, type StatLine } from './parts/CardFooter';
 import { CardHeader } from './parts/CardHeader';
 import { TeamLogoStack } from './parts/TeamLogoStack';
+
+type TeamMark = { label: string; color: string; image?: ImageSourcePropType };
 
 export type TeamCardProps = {
   team1: string;
@@ -12,11 +13,11 @@ export type TeamCardProps = {
   time: string;
   teamName: string;
   market: string;
-  confidence: ConfidenceTier;
+  confidence: number;
   stats: StatLine[];
   odds: string;
-  home: { label: string; color: string };
-  away: { label: string; color: string };
+  home: TeamMark;
+  away: TeamMark;
   onPress?: () => void;
 };
 
@@ -44,7 +45,7 @@ export function TeamCard({
               <Text style={styles.name} numberOfLines={1}>
                 {teamName}
               </Text>
-              <ConfidenceBadge tier={confidence} />
+              <ConfidenceBadge value={confidence} />
             </View>
             <Text style={styles.market} numberOfLines={1}>
               {market}
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: theme.space[6],
     width: '100%',
   },

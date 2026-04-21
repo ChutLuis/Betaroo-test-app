@@ -24,8 +24,8 @@ export const color = {
     secondary: palette.gray[600],
     tertiary: palette.gray[500],
     inverse: palette.gray[0],
-    dark: '#202020',
-    focus: 'rgba(153,160,174,0.16)',
+    dark: palette.gray[850],
+    focus: palette.alpha.slate[16],
   },
   icon: {
     primary: palette.gray[0],
@@ -56,7 +56,7 @@ export const color = {
       dark: palette.red[400],
       base: palette.red[600],
       light: palette.alpha.red[24],
-      lighter: palette.alpha.red[10],
+      lighter: palette.alpha.red[16],
     },
     success: {
       dark: palette.green[400],
@@ -68,7 +68,7 @@ export const color = {
       dark: palette.yellow[400],
       base: palette.yellow[600],
       light: palette.alpha.yellow[24],
-      lighter: palette.alpha.yellow[10],
+      lighter: palette.alpha.yellow[16],
     },
     feature: {
       dark: palette.purple[400],

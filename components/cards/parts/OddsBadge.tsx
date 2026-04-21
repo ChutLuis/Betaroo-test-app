@@ -9,7 +9,7 @@ type Props = {
 export function OddsBadge({ odds }: Props) {
   return (
     <View style={styles.root}>
-      <Icon name="sportsbook" size={12} color={theme.color.state.warning.base} />
+      <Icon name="sportsbook" size={12} color={theme.palette.yellow[500]} />
       <Text style={styles.value}>{odds}</Text>
     </View>
   );
@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
   },
   value: {
     ...theme.typography.monoXs,
+    // Figma's odds pill uses the wider 16px line-height, not the tight badge 14px.
+    lineHeight: 16,
     color: theme.color.text.primary,
     textTransform: 'uppercase',
   },

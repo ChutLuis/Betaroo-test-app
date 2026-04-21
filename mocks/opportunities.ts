@@ -5,6 +5,17 @@ export type Opportunity =
   | ({ kind: 'player'; id: string } & PlayerCardProps)
   | ({ kind: 'team'; id: string } & TeamCardProps);
 
+const playerWhite = require('../assets/figma-icons/image.png');
+const logoCeltics = require('../assets/figma-icons/team-logo.png');
+const logoThunder = require('../assets/figma-icons/team-logo-state.png');
+const logoBulls = require('../assets/figma-icons/team-logo-bulls.png');
+const logoNuggets = require('../assets/figma-icons/team-logo-state-1.png');
+const logoLakers = require('../assets/figma-icons/team-logo-lakers.png');
+const logoSuns = require('../assets/figma-icons/team-logo-suns.png');
+const logoSixers = require('../assets/figma-icons/team-logo-sixers.png');
+const playerJaylen = require('../assets/figma-icons/player-jaylen-brown.png');
+const playerEmbiid = require('../assets/figma-icons/player-joel-embiid.png');
+
 export const opportunities: Opportunity[] = [
   {
     kind: 'team',
@@ -14,15 +25,15 @@ export const opportunities: Opportunity[] = [
     time: 'FRI 10AM',
     teamName: 'Oklahoma City Thunder',
     market: 'Moneyline',
-    confidence: 'elite',
+    confidence: 95,
     stats: [
       { label: 'L5', value: 80 },
       { label: 'L10', value: 80 },
       { label: 'L20', value: 80 },
     ],
     odds: '+172',
-    home: { label: 'OKC', color: '#ef5133' },
-    away: { label: 'CHI', color: '#ce1141' },
+    home: { label: 'OKC', color: '#ef5133', image: logoThunder },
+    away: { label: 'CHI', color: '#ce1141', image: logoBulls },
   },
   {
     kind: 'player',
@@ -33,7 +44,7 @@ export const opportunities: Opportunity[] = [
     playerName: 'Derrick White',
     position: 'SG',
     statLine: '+6 Assists',
-    confidence: 'strong',
+    confidence: 75,
     stats: [
       { label: 'L5', value: 75 },
       { label: 'L10', value: 72 },
@@ -41,9 +52,11 @@ export const opportunities: Opportunity[] = [
     ],
     odds: '+172',
     avatarLabel: 'DW',
-    avatarColor: '#1A7544',
+    avatarColor: '#bb9753',
+    avatarImage: playerWhite,
     teamBadgeLabel: 'C',
-    teamBadgeColor: '#007A33',
+    teamBadgeColor: '#008348',
+    teamBadgeImage: logoCeltics,
   },
   {
     kind: 'team',
@@ -53,15 +66,15 @@ export const opportunities: Opportunity[] = [
     time: 'SAT 7PM',
     teamName: 'Los Angeles Lakers',
     market: 'Spread -3.5',
-    confidence: 'fair',
+    confidence: 55,
     stats: [
       { label: 'L5', value: 55 },
       { label: 'L10', value: 58 },
       { label: 'L20', value: 52 },
     ],
     odds: '-110',
-    home: { label: 'LAL', color: '#552583' },
-    away: { label: 'BOS', color: '#007A33' },
+    home: { label: 'LAL', color: '#552583', image: logoLakers },
+    away: { label: 'BOS', color: '#007A33', image: logoCeltics },
   },
   {
     kind: 'player',
@@ -72,7 +85,7 @@ export const opportunities: Opportunity[] = [
     playerName: 'Jaylen Brown',
     position: 'SF',
     statLine: '+24.5 Points',
-    confidence: 'elite',
+    confidence: 95,
     stats: [
       { label: 'L5', value: 92 },
       { label: 'L10', value: 88 },
@@ -81,8 +94,10 @@ export const opportunities: Opportunity[] = [
     odds: '-135',
     avatarLabel: 'JB',
     avatarColor: '#007A33',
+    avatarImage: playerJaylen,
     teamBadgeLabel: 'B',
-    teamBadgeColor: '#f6b51e',
+    teamBadgeColor: '#008348',
+    teamBadgeImage: logoCeltics,
   },
   {
     kind: 'team',
@@ -92,15 +107,15 @@ export const opportunities: Opportunity[] = [
     time: 'MON 9PM',
     teamName: 'Denver Nuggets',
     market: 'Total Over 221.5',
-    confidence: 'strong',
+    confidence: 75,
     stats: [
       { label: 'L5', value: 78 },
       { label: 'L10', value: 73 },
       { label: 'L20', value: 70 },
     ],
     odds: '+108',
-    home: { label: 'DEN', color: '#0E2240' },
-    away: { label: 'PHO', color: '#E56020' },
+    home: { label: 'DEN', color: '#0d2240', image: logoNuggets },
+    away: { label: 'PHO', color: '#E56020', image: logoSuns },
   },
   {
     kind: 'player',
@@ -111,7 +126,7 @@ export const opportunities: Opportunity[] = [
     playerName: 'Joel Embiid',
     position: 'C',
     statLine: '+10.5 Rebounds',
-    confidence: 'risky',
+    confidence: 25,
     stats: [
       { label: 'L5', value: 32 },
       { label: 'L10', value: 38 },
@@ -120,7 +135,9 @@ export const opportunities: Opportunity[] = [
     odds: '+240',
     avatarLabel: 'JE',
     avatarColor: '#ED174C',
+    avatarImage: playerEmbiid,
     teamBadgeLabel: 'P',
     teamBadgeColor: '#006BB6',
+    teamBadgeImage: logoSixers,
   },
 ];

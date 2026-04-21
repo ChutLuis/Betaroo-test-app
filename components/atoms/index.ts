@@ -4,6 +4,6 @@ export {
   tierFromPercentage,
   CONFIDENCE_LABEL,
   CONFIDENCE_PALETTE,
-  L5_PILL_PALETTE,
+  ELITE_BG,
   type ConfidenceTier,
 } from './confidence';

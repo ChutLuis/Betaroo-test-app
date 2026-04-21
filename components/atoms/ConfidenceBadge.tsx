@@ -3,18 +3,17 @@ import { theme } from '@/tokens';
 import {
   CONFIDENCE_LABEL,
   CONFIDENCE_PALETTE,
+  ELITE_BG,
   tierFromPercentage,
-  type ConfidenceTier,
 } from './confidence';
 import { EliteBackground } from './EliteBackground';
 
-type Props =
-  | { tier: ConfidenceTier; value?: never }
-  | { value: number; tier?: never };
+type Props = {
+  value: number;
+};
 
-export function ConfidenceBadge(props: Props) {
-  const tier: ConfidenceTier =
-    'tier' in props && props.tier ? props.tier : tierFromPercentage(props.value!);
+export function ConfidenceBadge({ value }: Props) {
+  const tier = tierFromPercentage(value);
   const { bg, fg } = CONFIDENCE_PALETTE[tier];
   const isElite = tier === 'elite';
 
@@ -22,7 +21,7 @@ export function ConfidenceBadge(props: Props) {
     <View
       style={[
         styles.badge,
-        isElite ? styles.badgeElite : { backgroundColor: bg },
+        isElite ? { backgroundColor: ELITE_BG } : { backgroundColor: bg },
       ]}
     >
       {isElite ? <EliteBackground /> : null}
@@ -38,9 +37,6 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.sm,
     alignSelf: 'flex-start',
     overflow: 'hidden',
-  },
-  badgeElite: {
-    backgroundColor: 'rgb(205, 49, 88)',
   },
   label: {
     ...theme.typography.monoXs,

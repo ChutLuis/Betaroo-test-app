@@ -17,7 +17,7 @@ export function CardHeader({ team1, team2, time, onInfoPress, onSharePress, onOp
       <View style={styles.left}>
         <View style={styles.vs}>
           <Text style={[styles.meta, styles.metaActive]}>{team1}</Text>
-          <Text style={[styles.atSign]}>@</Text>
+          <Text style={[styles.meta, styles.metaDisabled, styles.atSign]}>@</Text>
           <Text style={[styles.meta, styles.metaDisabled]}>{team2}</Text>
         </View>
         <View style={styles.dot} />
@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     color: theme.color.text.disabled,
   },
   atSign: {
-    ...theme.typography.monoXxs,
-    color: theme.color.text.disabled,
-    fontSize: 10,
+    // Figma glyph (`data-name="vs"`) is an @ character at ~9px.
+    fontSize: 9,
+    letterSpacing: 0,
   },
   dot: {
     width: 2,

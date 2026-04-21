@@ -1,48 +1,66 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
 import { theme } from '@/tokens';
 
-type Props = {
+type Mark = {
   label: string;
   color: string;
-  size?: number;
-  /** Optional sub-badge in bottom-right (e.g. team logo on a player avatar). */
-  badge?: {
-    label: string;
-    color: string;
-  };
+  image?: ImageSourcePropType;
 };
 
-export function Avatar({ label, color, size = 34, badge }: Props) {
+type Props = Mark & {
+  size?: number;
+  /** Optional sub-badge in bottom-right (e.g. team logo on a player avatar). */
+  badge?: Mark;
+};
+
+export function Avatar({ label, color, image, size = 34, badge }: Props) {
   const radius = size / 2;
   const badgeSize = Math.round(size * 0.45);
   return (
     <View style={[styles.wrap, { width: size, height: size }]}>
       <View
         style={[
-          styles.circle,
-          {
-            width: size,
-            height: size,
-            borderRadius: radius,
-            backgroundColor: color,
-          },
+          styles.circleShadow,
+          { width: size, height: size, borderRadius: radius },
         ]}
       >
-        <Text style={styles.label}>{label}</Text>
+        <View
+          style={[
+            styles.circleClip,
+            { width: size, height: size, borderRadius: radius, backgroundColor: color },
+          ]}
+        >
+          {image ? (
+            <Image source={image} style={styles.fill} resizeMode="cover" />
+          ) : (
+            <Text style={styles.label}>{label}</Text>
+          )}
+        </View>
       </View>
       {badge ? (
         <View
           style={[
-            styles.badge,
-            {
-              width: badgeSize,
-              height: badgeSize,
-              borderRadius: badgeSize / 2,
-              backgroundColor: badge.color,
-            },
+            styles.badgeShadow,
+            { width: badgeSize, height: badgeSize, borderRadius: badgeSize / 2 },
           ]}
         >
-          <Text style={styles.badgeLabel}>{badge.label}</Text>
+          <View
+            style={[
+              styles.badgeClip,
+              {
+                width: badgeSize,
+                height: badgeSize,
+                borderRadius: badgeSize / 2,
+                backgroundColor: badge.color,
+              },
+            ]}
+          >
+            {badge.image ? (
+              <Image source={badge.image} style={styles.fill} resizeMode="cover" />
+            ) : (
+              <Text style={styles.badgeLabel}>{badge.label}</Text>
+            )}
+          </View>
         </View>
       ) : null}
     </View>
@@ -53,16 +71,23 @@ const styles = StyleSheet.create({
   wrap: {
     position: 'relative',
   },
-  circle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.color.border.inverse,
+  circleShadow: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0.631 },
     shadowOpacity: 0.25,
     shadowRadius: 0.947,
     elevation: 2,
+  },
+  circleClip: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.color.border.inverse,
+  },
+  fill: {
+    width: '100%',
+    height: '100%',
   },
   label: {
     ...theme.typography.monoXxs,
@@ -70,19 +95,22 @@ const styles = StyleSheet.create({
     fontFamily: theme.fontFamily.heading,
     fontSize: 11,
   },
-  badge: {
+  badgeShadow: {
     position: 'absolute',
     right: -2,
     bottom: -1,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.color.border.inverse,
-    alignItems: 'center',
-    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0.276 },
     shadowOpacity: 0.25,
     shadowRadius: 0.414,
     elevation: 1,
+  },
+  badgeClip: {
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.color.border.inverse,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   badgeLabel: {
     fontFamily: theme.fontFamily.mono,

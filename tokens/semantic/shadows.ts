@@ -1,16 +1,19 @@
+import { palette } from '../primitives/colors';
 import { shadowPrimitive } from '../primitives/shadows';
 
 export const shadow = {
+  // Matches Figma `regular-shadow/x-small` — used by compact buttons (e.g. card add button).
+  compact: shadowPrimitive.xs,
   card: shadowPrimitive.sm,
   dropdown: {
-    shadowColor: '#171717',
+    shadowColor: palette.gray[950],
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.1,
     shadowRadius: 16,
     elevation: 3,
   },
   tooltip: {
-    shadowColor: '#171717',
+    shadowColor: palette.gray[950],
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.15,
     shadowRadius: 24,

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   stats: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: theme.space[6],
     flexShrink: 1,
   },
@@ -76,11 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.color.bg.secondary,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#0A0D14',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
+    ...theme.shadow.compact,
   },
   addBtnPressed: {
     opacity: 0.8,

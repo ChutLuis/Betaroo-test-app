@@ -29,38 +29,11 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function renderOpportunity({ item }: { item: Opportunity }) {
   if (item.kind === 'player') {
-    return (
-      <PlayerCard
-        team1={item.team1}
-        team2={item.team2}
-        time={item.time}
-        playerName={item.playerName}
-        position={item.position}
-        statLine={item.statLine}
-        confidence={item.confidence}
-        stats={item.stats}
-        odds={item.odds}
-        avatarLabel={item.avatarLabel}
-        avatarColor={item.avatarColor}
-        teamBadgeLabel={item.teamBadgeLabel}
-        teamBadgeColor={item.teamBadgeColor}
-      />
-    );
+    const { kind, id, ...props } = item;
+    return <PlayerCard {...props} />;
   }
-  return (
-    <TeamCard
-      team1={item.team1}
-      team2={item.team2}
-      time={item.time}
-      teamName={item.teamName}
-      market={item.market}
-      confidence={item.confidence}
-      stats={item.stats}
-      odds={item.odds}
-      home={item.home}
-      away={item.away}
-    />
-  );
+  const { kind, id, ...props } = item;
+  return <TeamCard {...props} />;
 }
 
 export default function App() {

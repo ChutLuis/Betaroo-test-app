@@ -1,12 +1,13 @@
 import { Image, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
+import { ELITE_BG } from './confidence';
 
 /**
  * Exact-replica background for the ELITE chance badge in Figma (node I1:2458;146:1726;163:24984).
  *
  * 5 layers, bottom → top:
- *   1. Base fill `rgb(205,49,88)`
+ *   1. Base fill `ELITE_BG`
  *   2. Radial pink highlight from top-center (SVG)
  *   3. White radial highlight from bottom-center (SVG, approximating mix-blend-overlay via alpha)
  *   4. ~155° linear dark overlay (shadow bands at edges)
@@ -20,7 +21,7 @@ const noise = require('../../assets/textures/noise.png');
 export function EliteBackground() {
   return (
     <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgb(205, 49, 88)' }]} />
+      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: ELITE_BG }]} />
 
       <Svg style={StyleSheet.absoluteFillObject} preserveAspectRatio="none">
         <Defs>
