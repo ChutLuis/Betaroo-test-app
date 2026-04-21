@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     gap: theme.space[6],
     width: '100%',
   },

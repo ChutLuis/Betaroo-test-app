@@ -34,8 +34,10 @@ const styles = StyleSheet.create({
   },
   value: {
     ...theme.typography.monoXs,
-    // Figma's odds pill uses the wider 16px line-height, not the tight 14px of monoXs.
+    // Figma's odds pill uses the wider 16px line-height (not the tight 14px of monoXs)
+    // and zero tracking on the glyph (monoXs defaults to 0.24 for tier pills).
     lineHeight: 16,
+    letterSpacing: 0,
     color: theme.color.text.primary,
     textTransform: 'uppercase',
   },

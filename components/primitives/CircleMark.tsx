@@ -28,6 +28,9 @@ export function CircleMark({
   style,
 }: Props) {
   const radius = size / 2;
+  // Figma keeps the ring a constant ~3.125% of the diameter (1.75px @ 56, 1.063px @ 34,
+  // 0.465px @ 15) so the circle doesn't look chunky at small sizes.
+  const borderWidth = Math.max(0.5, size * 0.03125);
   const shadow: ViewStyle = {
     shadowColor: theme.color.border.base,
     shadowOffset: { width: 0, height: 1 * shadowScale },
@@ -38,7 +41,12 @@ export function CircleMark({
 
   return (
     <View style={[{ width: size, height: size, borderRadius: radius }, shadow, style]}>
-      <View style={[styles.clip, { width: size, height: size, borderRadius: radius, backgroundColor: color }]}>
+      <View
+        style={[
+          styles.clip,
+          { width: size, height: size, borderRadius: radius, backgroundColor: color, borderWidth },
+        ]}
+      >
         {image ? (
           <Image source={image} style={styles.fill} resizeMode="cover" />
         ) : (
@@ -61,7 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.color.border.inverse,
   },
   fill: {

@@ -33,13 +33,12 @@ const styles = StyleSheet.create({
   pill: {
     height: 18,
     paddingHorizontal: theme.space[4],
-    paddingVertical: theme.space[4],
     borderRadius: theme.radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },
   pillLabel: {
-    ...theme.typography.monoXs,
+    ...theme.typography.monoBadge,
   },
   value: {
     ...theme.typography.paragraphXxs,

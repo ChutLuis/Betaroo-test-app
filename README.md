@@ -84,6 +84,24 @@ Every export is `as const`; consumers get autocomplete and typos are compile err
 
 Dropped the duplicate `primary*` scale — it was a near-copy of `brand` offset by one shade.
 
+## Polish pass
+
+Second round focused on the reviewer feedback ("spacing, sizing, and alignment"). Walked every in-scope Figma node side-by-side against the code. Concrete changes:
+
+- **Position chip** (`SG`, `SF`) — was `h14 minW14 r-xs pH-2`, Figma is `h12 minW12 r-sm p-2`.
+- **Player vs team header gap** — Figma's player card uses `gap-8` between nameplate and chance-badge, team card uses `gap-6`. Was `6` for both.
+- **Dropdown row radius** — Figma's selected row is `r-md`, default rows are `r-lg`. Was flat `r-md` for everything.
+- **CircleMark border scaling** — Figma keeps the ring at ~3.125% of diameter (`1.75px @ 56`, `1.06px @ 34`, `0.47px @ 15`). Was a flat `1px`, which looked chunky on the 15px team-badge overlay.
+- **Tier pill text centering on iOS** — Figma's `leading-[9.625px]` clips glyphs on iOS RN (`L10` → `L1U`, `ELITE` → `ELIIE`) inside `overflow: hidden` containers. Settled on `lineHeight: 16` (`≈ fontSize × 1.3`) which geometrically centers the uppercase cap in the 18px pill on iOS without clipping. Noted in the token comment.
+- **Odds glyph tracking** — Figma's `+172` has no tracking; was inheriting `0.24` from `monoXs` (the tier-pill token). Overridden inline.
+- **Real `vs.svg` asset** — replaced text `@` at 9px with the actual Figma SVG path, tintable via the `Icon` registry.
+- **ConfidenceBadge `alignSelf`** — dropped the `flex-start` override that was offsetting the badge vertically in `items-center` rows.
+- **OpportunityFooter layout** — removed a redundant `gap: 8` that fought with `justify-between` distribution.
+- **TeamCard header** — dropped an unused `justifyContent: 'center'` since the `flex-1` name handles distribution.
+- **Tier thresholds verified** against all four Figma atom variants (99/85/45/15 → Elite/Strong/Fair/Risky) and their color tokens resolve to the exact Figma hex.
+
+Scope stays at the two wide cards per the task doc ("pick 2 of 3"). Tall 196×200 variant not built.
+
 ## Decisions
 
 - **Expo over bare RN.** The brief says no Expo without a reason. Mine:

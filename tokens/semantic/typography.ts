@@ -40,6 +40,16 @@ export const typography = StyleSheet.create({
   monoMd:       { fontFamily: mono, fontSize: 16, lineHeight: 24, letterSpacing: 0, fontWeight: '500' },
   monoSm:       { fontFamily: mono, fontSize: 14, lineHeight: 20, letterSpacing: 0, fontWeight: '500' },
   monoXs:       { fontFamily: mono, fontSize: 12, lineHeight: 14, letterSpacing: 0.24, fontWeight: '500' },
+  // Tight-leading variant used inside fixed-height badge/pill chips. Figma spec is
+  // `leading-[9.625px]`, but two RN-iOS quirks force a different approach:
+  //   1. `lineHeight < fontSize` clips glyphs in `overflow: hidden` parents (L10 -> L1U).
+  //   2. iOS places the baseline at ~75% of the line box. With `lineHeight = fontSize`
+  //      the glyph lands in the upper half of the Text, so flex-centering an 18px pill
+  //      makes the text look top-aligned (see screenshot on first fix pass).
+  // `lineHeight: 16` gives a 16px Text box which flex-centers to y=1-17 inside the
+  // pill; the baseline at y=13 and cap-top at y=5 balance 5px above / 5px below the
+  // uppercase glyph — geometrically centered like Figma's rendering.
+  monoBadge:    { fontFamily: mono, fontSize: 12, lineHeight: 16, letterSpacing: 0.24, fontWeight: '500' },
   monoXxs:      { fontFamily: mono, fontSize: 10, lineHeight: 12, letterSpacing: -0.08, fontWeight: '500' },
   monoMini:     { fontFamily: mono, fontSize: 9,  lineHeight: 11, letterSpacing: 0.18, fontWeight: '500' },
 } satisfies Record<string, TextStyle>);

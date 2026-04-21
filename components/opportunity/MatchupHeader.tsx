@@ -17,7 +17,7 @@ export function MatchupHeader({ home, away, time, ...actions }: Props) {
       <View style={styles.left}>
         <View style={styles.vs}>
           <Text style={[styles.meta, styles.metaActive]}>{home.label}</Text>
-          <Text style={[styles.meta, styles.metaDisabled, styles.atSign]}>@</Text>
+          <Icon name="vs" size={9} color={theme.color.text.disabled} />
           <Text style={[styles.meta, styles.metaDisabled]}>{away.label}</Text>
         </View>
         <View style={styles.dot} />
@@ -64,11 +64,6 @@ const styles = StyleSheet.create({
   },
   metaDisabled: {
     color: theme.color.text.disabled,
-  },
-  atSign: {
-    // Figma glyph (`data-name="vs"`) is an @ character at 9px.
-    fontSize: 9,
-    letterSpacing: 0,
   },
   dot: {
     width: 2,

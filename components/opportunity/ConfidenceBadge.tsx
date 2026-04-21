@@ -20,12 +20,13 @@ export function ConfidenceBadge(props: Props) {
 
 const styles = StyleSheet.create({
   badge: {
+    height: 18,
     paddingHorizontal: theme.space[4],
-    paddingVertical: theme.space[4],
     borderRadius: theme.radius.sm,
-    alignSelf: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
-    ...theme.typography.monoXs,
+    ...theme.typography.monoBadge,
   },
 });

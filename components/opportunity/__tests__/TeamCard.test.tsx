@@ -22,11 +22,13 @@ const props: TeamCardProps = {
 
 describe('TeamCard', () => {
   it('renders team name, market and matchup', () => {
-    const { getByText } = render(<TeamCard {...props} />);
+    const { getByText, getAllByText } = render(<TeamCard {...props} />);
     expect(getByText('Oklahoma City Thunder')).toBeTruthy();
     expect(getByText('Moneyline')).toBeTruthy();
-    expect(getByText('OKC')).toBeTruthy();
-    expect(getByText('CHI')).toBeTruthy();
+    // CircleMark renders the label inside the logo when no image is supplied,
+    // so the matchup header copy appears twice here.
+    expect(getAllByText('OKC').length).toBeGreaterThan(0);
+    expect(getAllByText('CHI').length).toBeGreaterThan(0);
     expect(getByText('FRI 10AM')).toBeTruthy();
   });
 

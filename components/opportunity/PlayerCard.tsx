@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: theme.space[2],
     justifyContent: 'center',
+    minWidth: 0,
   },
   headerRow: {
     flexDirection: 'row',
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
   },
   positionText: {
     ...theme.typography.monoMini,
+    lineHeight: 9.625,
     color: theme.color.state.faded.base,
     textAlign: 'center',
   },
