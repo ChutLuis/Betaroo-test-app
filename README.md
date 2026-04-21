@@ -2,6 +2,10 @@
 
 React Native + TypeScript implementation. Two opportunity card variants (player + team), their atoms (`ConfidenceBadge`, `L5Pill`, `OddsBadge`), a 3-state league select, and a restructured token system.
 
+## Demo
+
+Simulator screen recording: [`recordings/demo.mov`](recordings/demo.mov) — card list scrolling, tier colours on `L5Pill` / `ConfidenceBadge`, and the select moving through all three states (default → focus/open → filled → re-select).
+
 ## Run
 
 ```bash
